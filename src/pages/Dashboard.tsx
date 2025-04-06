@@ -26,9 +26,16 @@ const Dashboard = () => {
         <Button asChild>
           <Link to="/grade">Essay Grading</Link>
         </Button>
-        <Button asChild>
-          <Link to="/mcq">Multiple Choice Questions</Link>
-        </Button>
+        
+        {user?.role === 'teacher' ? (
+          <Button asChild>
+            <Link to="/ppt-generator">PPT Generation</Link>
+          </Button>
+        ) : (
+          <Button asChild>
+            <Link to="/mcq">Multiple Choice Questions</Link>
+          </Button>
+        )}
       </div>
       
       {user?.role === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />}
