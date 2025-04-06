@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Grade from "./pages/Grade";
 import McqGrade from "./pages/McqGrade";
+import PptGenerator from "./pages/PptGenerator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/grade" element={<Grade />} />
               <Route path="/mcq" element={<McqGrade />} />
+              <Route path="/ppt-generator" element={<PptGenerator />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
