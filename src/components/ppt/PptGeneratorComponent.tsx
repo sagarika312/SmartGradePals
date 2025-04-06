@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronLeft, ChevronRight, Download, Presentation, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, Presentation, Loader2, Palette } from 'lucide-react';
 
 type Slide = {
   id: number;
@@ -28,6 +29,40 @@ const PptGeneratorComponent: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideCount, setSlideCount] = useState('5');
   const [presentationType, setPresentationType] = useState('educational');
+  const [themeColor, setThemeColor] = useState('blue');
+  
+  const themeStyles = {
+    blue: {
+      bg: "bg-gradient-to-br from-blue-50 to-blue-100",
+      title: "text-blue-800",
+      border: "border-blue-200",
+      bullet: "text-blue-500",
+    },
+    green: {
+      bg: "bg-gradient-to-br from-green-50 to-green-100",
+      title: "text-green-800",
+      border: "border-green-200",
+      bullet: "text-green-500",
+    },
+    amber: {
+      bg: "bg-gradient-to-br from-amber-50 to-amber-100",
+      title: "text-amber-800",
+      border: "border-amber-200",
+      bullet: "text-amber-500",
+    },
+    purple: {
+      bg: "bg-gradient-to-br from-purple-50 to-purple-100",
+      title: "text-purple-800",
+      border: "border-purple-200",
+      bullet: "text-purple-500",
+    },
+    rose: {
+      bg: "bg-gradient-to-br from-rose-50 to-rose-100",
+      title: "text-rose-800",
+      border: "border-rose-200",
+      bullet: "text-rose-500",
+    },
+  };
 
   const handleGeneratePPT = async () => {
     if (!topic) {
@@ -68,6 +103,8 @@ const PptGeneratorComponent: React.FC = () => {
     }
   };
 
+  const currentTheme = themeStyles[themeColor as keyof typeof themeStyles];
+
   return (
     <div className="space-y-6">
       <Card>
@@ -88,7 +125,7 @@ const PptGeneratorComponent: React.FC = () => {
               />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label htmlFor="slide-count" className="block text-sm font-medium mb-1">
                   Number of Slides
@@ -118,6 +155,24 @@ const PptGeneratorComponent: React.FC = () => {
                     <SelectItem value="educational">Educational</SelectItem>
                     <SelectItem value="business">Business</SelectItem>
                     <SelectItem value="scientific">Scientific</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <label htmlFor="theme-color" className="block text-sm font-medium mb-1">
+                  Color Theme
+                </label>
+                <Select value={themeColor} onValueChange={setThemeColor}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select theme color" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="blue">Blue</SelectItem>
+                    <SelectItem value="green">Green</SelectItem>
+                    <SelectItem value="amber">Amber</SelectItem>
+                    <SelectItem value="purple">Purple</SelectItem>
+                    <SelectItem value="rose">Rose</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -153,27 +208,48 @@ const PptGeneratorComponent: React.FC = () => {
             </TabsList>
             
             <TabsContent value="preview" className="pt-4">
-              <Card className="bg-white shadow-lg border-2">
+              <Card className={`${currentTheme.border} shadow-lg border-2`}>
                 <CardContent className="p-8">
-                  <div className="aspect-video bg-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
-                    <h2 className="text-2xl font-bold mb-6">{slides[currentSlide].title}</h2>
-                    <ul className="text-left w-full max-w-md space-y-3">
+                  <div className={`aspect-video ${currentTheme.bg} rounded-lg p-6 flex flex-col justify-center items-center text-center shadow-inner`}>
+                    <div className="w-full mb-8 flex items-center justify-center">
+                      <h2 className={`text-3xl font-bold ${currentTheme.title}`}>
+                        {slides[currentSlide].title}
+                      </h2>
+                    </div>
+                    <ul className="text-left w-full max-w-md space-y-4">
                       {slides[currentSlide].content.map((point, idx) => (
-                        <li key={idx} className="flex items-start">
-                          <span className="mr-2">•</span> 
-                          <span>{point}</span>
+                        <li key={idx} className="flex items-start animate-fade-in" style={{ animationDelay: `${idx * 150}ms` }}>
+                          <span className={`${currentTheme.bullet} mr-3 text-xl`}>•</span> 
+                          <span className="text-lg">{point}</span>
                         </li>
                       ))}
                     </ul>
+                    
+                    <div className="absolute bottom-4 right-4 text-sm text-gray-500">
+                      Slide {currentSlide + 1} / {slides.length}
+                    </div>
                   </div>
                   
                   <div className="flex justify-between items-center mt-6">
                     <Button variant="outline" onClick={prevSlide} disabled={currentSlide === 0}>
                       <ChevronLeft className="h-4 w-4 mr-2" /> Previous
                     </Button>
-                    <span className="text-sm text-gray-500">
-                      Slide {currentSlide + 1} of {slides.length}
-                    </span>
+                    
+                    <div className="flex space-x-2">
+                      {slides.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentSlide(idx)}
+                          className={`w-2.5 h-2.5 rounded-full ${
+                            idx === currentSlide 
+                              ? `bg-${themeColor}-500` 
+                              : 'bg-gray-300 hover:bg-gray-400'
+                          } transition-colors`}
+                          aria-label={`Go to slide ${idx + 1}`}
+                        />
+                      ))}
+                    </div>
+                    
                     <Button variant="outline" onClick={nextSlide} disabled={currentSlide === slides.length - 1}>
                       Next <ChevronRight className="h-4 w-4 ml-2" />
                     </Button>
@@ -190,7 +266,9 @@ const PptGeneratorComponent: React.FC = () => {
                       <div 
                         key={idx} 
                         className={`p-4 rounded-md cursor-pointer hover:bg-gray-100 transition-colors ${
-                          idx === currentSlide ? 'bg-gray-100 border-l-4 border-brand-600' : ''
+                          idx === currentSlide 
+                            ? `bg-gray-100 border-l-4 border-${themeColor}-500` 
+                            : ''
                         }`}
                         onClick={() => setCurrentSlide(idx)}
                       >
