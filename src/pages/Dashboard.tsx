@@ -3,7 +3,8 @@ import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import TeacherDashboard from '@/components/dashboard/TeacherDashboard';
 import StudentDashboard from '@/components/dashboard/StudentDashboard';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {
   const { user, isAuthenticated } = useAuth();
@@ -19,6 +20,15 @@ const Dashboard = () => {
         <p className="text-muted-foreground">
           Welcome back, {user?.name}! Here's an overview of your {user?.role === 'teacher' ? 'class' : 'learning'} activity.
         </p>
+      </div>
+      
+      <div className="flex flex-wrap gap-4">
+        <Button asChild>
+          <Link to="/grade">Essay Grading</Link>
+        </Button>
+        <Button asChild>
+          <Link to="/mcq">Multiple Choice Questions</Link>
+        </Button>
       </div>
       
       {user?.role === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />}

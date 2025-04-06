@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Grade from "./pages/Grade";
+import McqGrade from "./pages/McqGrade";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/grade" element={<Grade />} />
+              <Route path="/mcq" element={<McqGrade />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
