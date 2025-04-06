@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,9 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronLeft, ChevronRight, Download, FilePresentation, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, Presentation, Loader2 } from 'lucide-react';
 
-// Define slide types
 type Slide = {
   id: number;
   title: string;
@@ -40,8 +38,6 @@ const PptGeneratorComponent: React.FC = () => {
     setLoading(true);
     
     try {
-      // In a real app, this would call an API endpoint to use Gemini
-      // For now, we'll use mock data
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       const generatedSlides = generateMockSlides(topic, parseInt(slideCount), presentationType);
@@ -57,8 +53,6 @@ const PptGeneratorComponent: React.FC = () => {
   };
 
   const handleDownload = () => {
-    // In a real app, this would generate a PPT file
-    // For now, just show a toast message
     toast.success('Download feature would save the presentation as a .pptx file');
   };
 
@@ -141,7 +135,7 @@ const PptGeneratorComponent: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <FilePresentation className="mr-2 h-4 w-4" />
+                  <Presentation className="mr-2 h-4 w-4" />
                   Generate Presentation
                 </>
               )}
@@ -233,11 +227,9 @@ const PptGeneratorComponent: React.FC = () => {
   );
 };
 
-// Mock data generator function
 function generateMockSlides(topic: string, count: number, type: string): Slide[] {
   const slides: Slide[] = [];
   
-  // Add title slide
   slides.push({
     id: 1,
     title: topic,
@@ -247,7 +239,6 @@ function generateMockSlides(topic: string, count: number, type: string): Slide[]
     ]
   });
   
-  // Generate content slides based on topic
   if (topic.toLowerCase().includes('photosynthesis')) {
     slides.push(
       {
@@ -288,7 +279,6 @@ function generateMockSlides(topic: string, count: number, type: string): Slide[]
       }
     );
   } else {
-    // Generic slides for any other topic
     for (let i = 2; i <= count; i++) {
       slides.push({
         id: i,
@@ -303,7 +293,6 @@ function generateMockSlides(topic: string, count: number, type: string): Slide[]
     }
   }
   
-  // Add conclusion slide
   slides.push({
     id: count + 1,
     title: "Conclusion",
