@@ -5,15 +5,10 @@ import { Navigate } from 'react-router-dom';
 import McqGrading from '@/components/grading/McqGrading';
 
 const McqGrade = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
-  }
-  
-  // If user is not a student, redirect to dashboard
-  if (user?.role !== 'student') {
-    return <Navigate to="/dashboard" replace />;
   }
   
   return (
